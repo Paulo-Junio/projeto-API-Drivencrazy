@@ -16,15 +16,15 @@ export const OptionVoteRegister = async (req, res) => {
 export const OptionEnquetesData = async (req, res) => {
     const id = req.params.id;
     try {
-       const opcoes = await opcoesDeVotoCollection.findOne({pollId: id}).toArray();
-       console.log(opcoes)
+       const opcoes = await opcoesDeVotoCollection.find({pollId:id}).toArray();
+        console.log(opcoes)
 
-       if(!opcoes || opcoes==[]){
+       if(opcoes ==[] || !opcoes ){
         return res.sendStatus(404);
        }
 
         res.status(200).send(opcoes);
     } catch (error){
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     }
 }
