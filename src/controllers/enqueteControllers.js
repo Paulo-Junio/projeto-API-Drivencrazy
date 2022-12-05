@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { enquetesCollection } from "../database/db.js";
 import { opcoesDeVotoCollection } from "../database/db.js";
 import { votosCollection } from "../database/db.js";
+import dayjs from "dayjs";
 
 
 
@@ -28,7 +29,7 @@ export const EnquetesData = async (req, res) => {
 }
 
 export const Result = async (req,res) =>{
-    const id = req.params.id
+    const id = req.params.id;
     try {
         const opcoes = await opcoesDeVotoCollection.find({pollId: id}).toArray();
         const votos = await votosCollection.find().toArray();
@@ -41,10 +42,8 @@ export const Result = async (req,res) =>{
             let opcao = opcoes[i]._id;
             let id_opcao = opcao.toHexString()
             contagemDeVotos = 0;
-
-            for(let j=0; j <votos.length; j++){
+            for(let j=0; j < votos.length; j++){
                 let id_voto = votos[j].choiceId;
-              
                 if(Object.is(id_opcao , id_voto)){
                     contagemDeVotos +=1;
                 }
@@ -72,10 +71,10 @@ export const Result = async (req,res) =>{
         }
 
         
-         res.status(201).send(resultado);
+        res.status(201).send(resultado);
 
 
      } catch (error){
-         res.sendStatus(500);
+         res.status(500).send(error);
      }
 }
