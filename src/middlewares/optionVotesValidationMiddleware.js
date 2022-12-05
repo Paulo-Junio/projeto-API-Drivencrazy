@@ -13,13 +13,18 @@ export const OptionEnqueteValidation = async(req, res, next)=>{
             return res.sendStatus(422);
         };
 
-        const opcaoExiste = await opcoesDeVotoCollection.findOne(opcao);
-
-        if (opcaoExiste){
-            return res.sendStatus(409);
+        const opcaoExiste = await opcoesDeVotoCollection.findOne(opcao); 
+        console.log("Sou eu:" ,opcaoExiste)
+        if (opcaoExiste){ 
+            return res.sendStatus(409); 
         }
 
         const enquete= await enquetesCollection.findOne({_id: new ObjectId(id)});
+        console.log("enquete:",enquete)
+        if(!enquete){
+            return res.sendStatus(404)
+        }
+
         const date = dayjs().format("YYYY-MM-DD HH:mm");
         if(enquete.expireAt < date){
             return res.sendStatus(403);
@@ -27,7 +32,7 @@ export const OptionEnqueteValidation = async(req, res, next)=>{
 
         res.locals.opcao = opcao;
     } catch(error){
-        res.sendStatus(500)
+        return res.sendStatus(404)
     }
 
    

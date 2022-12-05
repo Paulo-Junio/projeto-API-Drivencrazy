@@ -4,7 +4,6 @@ import { opcoesDeVotoCollection } from "../database/db.js";
 
 export const OptionVoteRegister = async (req, res) => {
     const opcao = res.locals.opcao;
-    console.log("entrei no controller")
 
     try {
        await opcoesDeVotoCollection.insertOne(opcao);
@@ -17,14 +16,15 @@ export const OptionVoteRegister = async (req, res) => {
 export const OptionEnquetesData = async (req, res) => {
     const id = req.params.id;
     try {
-       const opcoes = await opcoesDeVotoCollection.find({pollId: id}).toArray();
+       const opcoes = await opcoesDeVotoCollection.findOne({pollId: id}).toArray();
+       console.log(opcoes)
 
-       if(!opcoes){
-        return res.send(404);
+       if(!opcoes || opcoes==[]){
+        return res.sendStatus(404);
        }
 
         res.status(200).send(opcoes);
     } catch (error){
-        res.sendStatus(500);
+        return res.sendStatus(404);
     }
 }

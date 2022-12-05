@@ -31,7 +31,18 @@ export const EnquetesData = async (req, res) => {
 export const Result = async (req,res) =>{
     const id = req.params.id;
     try {
+        console.log(id)
+        const enqueteEscolhida = await enquetesCollection.findOne({_id: ObjectId(id)});
+        
+        if(!enqueteEscolhida){
+            return res.sendStatus(404)
+        }
+
         const opcoes = await opcoesDeVotoCollection.find({pollId: id}).toArray();
+        if(!opcoes){
+            return res.sendStatus(404)
+        }
+
         const votos = await votosCollection.find().toArray();
         let maiorNumeroDeVotos = 0;
         let contagemDeVotos = 0;
@@ -75,6 +86,6 @@ export const Result = async (req,res) =>{
 
 
      } catch (error){
-         res.status(500).send(error);
+        return res.sendStatus(404)
      }
 }
